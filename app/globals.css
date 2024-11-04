@@ -14,8 +14,15 @@
   }
 }
 
+html {
+  background: linear-gradient(to bottom, #ffffff, #e0f2fe);
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
