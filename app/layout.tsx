@@ -29,10 +29,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <main className="flex min-h-screen w-full flex-col">
-          <Nav />
-          {children}
-        </main>
+        <div className="fixed h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-cyan-100" />
+        <main className="flex min-h-screen w-full flex-col">{children}</main>
       </body>
     </html>
   );
