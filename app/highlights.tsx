@@ -1,21 +1,13 @@
 "use client";
 
 import {
-  inView,
   motion,
   useInView,
   useMotionValueEvent,
   useScroll,
 } from "framer-motion";
 import { PlayCircle } from "lucide-react";
-import {
-  ReactNode,
-  use,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import { useIslandContext } from "./island-context";
 
 export default function Highlights() {
@@ -36,7 +28,7 @@ export default function Highlights() {
     container: scrollerRef,
   });
   const inView = useInView(scrollerRef, { amount: 0.3 });
-  const changingRef = useRef(false);
+  const changingRef = useRef(false); // used to prevent an infinite loop of changing highlights and
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -88,6 +80,7 @@ export default function Highlights() {
     },
   ];
 
+  // scroll event listener to detect which highlight is currently in view
   useMotionValueEvent(scrollX, "change", (v) => {
     if (!scrollerRef.current) return;
     if (changingRef.current) return;
@@ -109,6 +102,7 @@ export default function Highlights() {
     setCurrentIndex(highlightElements.indexOf(closestHighlight));
   });
 
+  // when the time left reaches 0, transition to the next highlight
   useEffect(() => {
     if (timeLeft <= 0) {
       if (!scrollerRef.current) return;
@@ -262,7 +256,7 @@ function Card({
               opacity: 0,
             };
           },
-          active: (i) => {
+          active: () => {
             return {
               x: 0,
               opacity: 1,

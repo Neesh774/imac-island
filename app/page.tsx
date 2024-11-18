@@ -27,6 +27,7 @@ export default function Home() {
       setType(undefined);
       noIslandRef.current = true;
       setTimeout(() => {
+        // general smoothness, don't want to hide and show the island too quickly
         noIslandRef.current = false;
       }, 1000);
     }
@@ -38,6 +39,7 @@ export default function Home() {
         type,
         setType: (t) => {
           if (noIslandRef.current) return;
+          // only change playing state if we're transitioning *to* highlights
           if (t == "highlights" && type != "highlights") setPlaying(true);
           setType(t);
         },

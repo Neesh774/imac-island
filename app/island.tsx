@@ -1,14 +1,8 @@
-import {
-  animate,
-  AnimatePresence,
-  motion,
-  useAnimationFrame,
-  Variants,
-} from "framer-motion";
+import { AnimatePresence, motion, Variants } from "framer-motion";
 import { Color, COLORS, SLIDE_TIME, useIslandContext } from "./island-context";
 import { Pause, Play } from "lucide-react";
-import { useEffect, useRef } from "react";
 import usePrevious from "./usePrevious";
+import { cn } from "@/lib/cn";
 
 export default function Island() {
   const {
@@ -17,6 +11,7 @@ export default function Island() {
   } = useIslandContext();
   const lastType = usePrevious(type);
 
+  // general purpose spring transition - check out easing.dev
   const springTransition = {
     type: "spring",
     stiffness: 200,
@@ -43,14 +38,14 @@ export default function Island() {
               opacity: 1,
               x: 0,
               y: 0,
-              width: 56,
-              height: lastType == "images" ? [58, 80, 56] : 56,
-              marginRight: 8,
+              width: 56, // hardcoded width because framer motion isn't great with calculating paddings/margins
+              height: lastType == "images" ? [58, 80, 56] : 56, // set keyframes for height transition to force it to animate up/downwards
+              marginRight: 8, // margin for the player dots container
               scale: 1,
               transition: {
                 ...springTransition,
                 height: {
-                  ease: "easeInOut",
+                  ease: "easeInOut", // can't use spring because we're using keyframes
                 },
                 width: {
                   type: "spring",
@@ -91,9 +86,10 @@ export default function Island() {
           initial="initial"
           animate={`animate-${type}`}
           exit="exit"
-          className={`p-3.5 rounded-full backdrop-blur-lg bg-gray-200/50 transition-colors overflow-hidden flex flex-row items-center justify-center ${
+          className={cn(
+            "p-3.5 rounded-full backdrop-blur-lg bg-gray-200/50 transition-colors overflow-hidden flex flex-row items-center justify-center",
             type == "highlights" && "hover:bg-gray-300/70"
-          }`}
+          )}
         >
           <motion.div
             variants={{
@@ -174,14 +170,14 @@ export default function Island() {
               marginLeft: 8,
               scale: 0.4,
             },
-            animate: {
+            "animate-highlights": {
               opacity: 1,
               x: 0,
               y: 0,
               marginLeft: 8,
               scale: 1,
             },
-            images: {
+            "animate-images": {
               x: -8,
               y: 80,
               width: 0,
@@ -201,7 +197,7 @@ export default function Island() {
             delayChildren: 0.1,
           }}
           initial="initial"
-          animate={type == "highlights" ? "animate" : "images"}
+          animate={`animate-${type}`}
           exit="exit"
           className="flex flex-row gap-3.5 h-14 rounded-full backdrop-blur-lg bg-gray-200/50 p-4 px-5 items-center justify-center overflow-hidden"
         >
@@ -216,8 +212,7 @@ export default function Island() {
 
 function PlayerDot({ index }: { index: number }) {
   const {
-    type,
-    highlights: { setTimeLeft, currentIndex, timeLeft, playing },
+    highlights: { currentIndex, timeLeft },
   } = useIslandContext();
 
   const active = currentIndex === index;
@@ -230,7 +225,7 @@ function PlayerDot({ index }: { index: number }) {
       width: active ? 48 : 7,
       scale: active ? 1 : 0.9,
     },
-    animate: {
+    "animate-highlights": {
       opacity: 1,
       x: 0,
       y: 0,
