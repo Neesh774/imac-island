@@ -1,7 +1,7 @@
 import { AnimatePresence, motion, Variants } from "framer-motion";
 import { Color, COLORS, SLIDE_TIME, useIslandContext } from "./island-context";
 import { Pause, Play } from "lucide-react";
-import usePrevious from "./usePrevious";
+import usePrevious from "../lib/usePrevious";
 import { cn } from "@/lib/cn";
 
 export default function Island() {
